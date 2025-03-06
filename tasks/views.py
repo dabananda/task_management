@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskModelForm
 from tasks.models import Task
+from django.db.models import Count, Q
 
 
 def show_task(request):
@@ -9,18 +10,19 @@ def show_task(request):
 
 
 def admin_dashboard(request):
-    tasks = Task.objects.all()
-    total_tasks = tasks.count()
-    pending_tasks = Task.objects.filter(status="PENDING").count()
-    completed_tasks = Task.objects.filter(status="COMPLETED").count()
-    in_progress_tasks = Task.objects.filter(status="IN_PROGRESS").count()
+    tasks = Task.objects.select_related(
+        "task_details").prefetch_related("assigned_to").all()
+
+    counts = Task.objects.aggregate(
+        total=Count('id'),
+        completed=Count('id', filter=Q(status="COMPLETED")),
+        in_progress=Count('id', filter=Q(status="IN_PROGRESS")),
+        pending=Count('id', filter=Q(status="PENDING")),
+    )
 
     context = {
         "tasks": tasks,
-        "total_tasks": total_tasks,
-        "pending_tasks": pending_tasks,
-        "completed_tasks": completed_tasks,
-        "in_progress_tasks": in_progress_tasks
+        "counts": counts
     }
 
     return render(request, "dashboard/admin-dashboard.html", context)
