@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Task
+from tasks.models import Task, TaskDetail
 
 
 class StyledFormMixing:
@@ -26,6 +26,10 @@ class StyledFormMixing:
                 field.widget.attrs.update({
                     'class': "px-2 py-1"
                 })
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({
+                    'class': "border-2 border-solid border-slate-800 px-2 py-1"
+                })
 
 
 class TaskModelForm(StyledFormMixing, forms.ModelForm):
@@ -36,6 +40,16 @@ class TaskModelForm(StyledFormMixing, forms.ModelForm):
             'due_date': forms.SelectDateWidget,
             'assigned_to': forms.CheckboxSelectMultiple
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+
+class TaskDetailModelForm(StyledFormMixing, forms.ModelForm):
+    class Meta:
+        model = TaskDetail
+        fields = ['priority', 'notes']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
