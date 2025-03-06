@@ -10,15 +10,26 @@ def show_task(request):
 
 
 def admin_dashboard(request):
-    tasks = Task.objects.select_related(
-        "task_details").prefetch_related("assigned_to").all()
-
     counts = Task.objects.aggregate(
         total=Count('id'),
         completed=Count('id', filter=Q(status="COMPLETED")),
         in_progress=Count('id', filter=Q(status="IN_PROGRESS")),
         pending=Count('id', filter=Q(status="PENDING")),
     )
+
+    base_query = Task.objects.select_related(
+        "task_details").prefetch_related("assigned_to")
+
+    type = request.GET.get('type', 'all')
+
+    if type == 'completed':
+        tasks = base_query.filter(status='COMPLETED')
+    elif type == 'in-progress':
+        tasks = base_query.filter(status='IN_PROGRESS')
+    elif type == 'pending':
+        tasks = base_query.filter(status='PENDING')
+    elif type == 'all':
+        tasks = base_query.all()
 
     context = {
         "tasks": tasks,
