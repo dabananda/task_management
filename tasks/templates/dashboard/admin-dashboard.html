@@ -34,14 +34,22 @@ Dashboard{%endblock title %} {% block tasks %}
         {% endfor %}
       </div>
       <div class="text-gray-500">{{task.created_at|timesince}}</div>
-      <div>
+      <div class="flex">
         <a
           href="{% url 'update-task' task.id %}"
           class="px-2 py-2 bg-blue-500 text-white text-sm rounded me-1"
         >
           UPDATE
         </a>
-        <a class="px-2 py-2 bg-red-600 text-white text-sm rounded"> DELETE </a>
+        <form action="{% url 'delete-task' task.id %}" method="POST">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="px-2 py-2 bg-red-600 text-white text-sm rounded"
+          >
+            DELETE
+          </button>
+        </form>
       </div>
     </div>
     {% endfor %}
