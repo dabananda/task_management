@@ -2,18 +2,19 @@
 Dashboard{%endblock title %} {% block tasks %}
 <div class="bg-white rounded-xl shadow-sm">
   <div
-    class="grid grid-cols-4 p-4 border-b border-gray-100 text-sm text-gray-500"
+    class="grid grid-cols-5 p-4 border-b border-gray-100 text-sm text-gray-500"
   >
     <div>TASK TITLE</div>
     <div>PRIORITY</div>
     <div>TEAM</div>
     <div>CREATED AT</div>
+    <div>ACTIONS</div>
   </div>
   <!-- Task Items  -->
   <div class="divide-y divide-gray-100">
     <!-- Task List -->
     {% for task in tasks %}
-    <div class="grid grid-cols-4 gap-4 p-4 items-center">
+    <div class="grid grid-cols-5 gap-4 p-4 items-center">
       <div class="flex items-center gap-2">
         <div class="w-2 h-2 rounded-full bg-green-500"></div>
         <span>{{task.title}}</span>
@@ -33,6 +34,15 @@ Dashboard{%endblock title %} {% block tasks %}
         {% endfor %}
       </div>
       <div class="text-gray-500">{{task.created_at|timesince}}</div>
+      <div>
+        <a
+          href="{% url 'update-task' task.id %}"
+          class="px-2 py-2 bg-blue-500 text-white text-sm rounded me-1"
+        >
+          UPDATE
+        </a>
+        <a class="px-2 py-2 bg-red-600 text-white text-sm rounded"> DELETE </a>
+      </div>
     </div>
     {% endfor %}
   </div>
