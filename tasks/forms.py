@@ -3,6 +3,10 @@ from tasks.models import Task, TaskDetail
 
 
 class StyledFormMixing:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
     default_classes = "w-full border-2 border-solid border-slate-800 px-2 py-1"
 
     def apply_styled_widgets(self):
@@ -41,16 +45,8 @@ class TaskModelForm(StyledFormMixing, forms.ModelForm):
             'assigned_to': forms.CheckboxSelectMultiple
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
-
 
 class TaskDetailModelForm(StyledFormMixing, forms.ModelForm):
     class Meta:
         model = TaskDetail
         fields = ['priority', 'notes']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
