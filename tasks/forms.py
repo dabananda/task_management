@@ -7,7 +7,7 @@ class StyledFormMixing:
         super().__init__(*args, **kwargs)
         self.apply_styled_widgets()
 
-    default_classes = "w-full border-2 border-solid border-slate-800 px-2 py-1"
+    default_classes = "w-full border-2 border-solid border-slate-800 mb-3 px-2 py-1"
 
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
@@ -33,6 +33,16 @@ class StyledFormMixing:
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({
                     'class': "border-2 border-solid border-slate-800 px-2 py-1"
+                })
+            elif isinstance(field.widget, forms.EmailInput):
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                    'placeholder': f"Enter {field.label.lower()}",
+                })
+            elif isinstance(field.widget, forms.PasswordInput):
+                field.widget.attrs.update({
+                    'class': self.default_classes,
+                    'placeholder': f"Enter {field.label.lower()}",
                 })
 
 

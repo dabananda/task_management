@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 import re
 from tasks.forms import StyledFormMixing
-
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -22,7 +22,7 @@ class RegisterForm(UserCreationForm):
 class CustomRegistrationForm(StyledFormMixing, forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     confirm_password = forms.CharField(
-        label='Password', widget=forms.PasswordInput)
+        label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -75,3 +75,8 @@ class CustomRegistrationForm(StyledFormMixing, forms.ModelForm):
             user.save()
 
         return user
+
+
+class LoginForm(StyledFormMixing, AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

@@ -9,23 +9,17 @@
   </head>
   <body>
     <div class="w-1/2 border mx-auto p-4 my-4">
-      <h1>Login Form</h1>
+      <p class="text-3xl text-center">Login Form</p>
+      <hr class='my-3'>
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
       <form method="POST">
-        {% csrf_token %}
-        <input
-          class="px-2 py-1 border-gray-300"
-          type="text"
-          placeholder="Enter username"
-          name="username"
-        />
-        <br />
-        <input
-          class="px-2 py-1 border-gray-300"
-          type="password"
-          placeholder="Enter password"
-          name="password"
-        />
-        <br />
+        {% csrf_token %} {{form}}
         <button class="bg-green-600 my-3 px-5 py-2 text-white rounded">
           SUBMIT
         </button>
